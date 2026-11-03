@@ -1,3 +1,4 @@
+
 from fastapi import FastAPI, HTTPException
 
 app = FastAPI(
@@ -11,13 +12,28 @@ EVENTS = [
     {"id": 2, "title": "Турнир по шахматам", "club": "Шахматный клуб", "room": "Аудитория 311"}
 ]
 
+CLUBS = [
+    {"id": 1, "name": "IT-клуб", "description": "Программирование и технологии"},
+    {"id": 2, "name": "Шахматный клуб", "description": "Шахматы и турниры"},
+    {"id": 3, "name": "Книжный клуб", "description": "Обсуждение книг и литературы"}
+]
+
+ROOMS = [
+    {"id": 1, "name": "Аудитория 203", "building": "Корпус 1", "capacity": 30},
+    {"id": 2, "name": "Аудитория 311", "building": "Корпус 2", "capacity": 20},
+    {"id": 3, "name": "Актовый зал", "building": "Главный корпус", "capacity": 150}
+]
+
+
 @app.get("/api/health")
 def health():
-    return { "status": "ok" }
+    return {"status": "ok"}
+
 
 @app.get("/api/events")
 def list_events():
     return EVENTS
+
 
 @app.get("/api/events/{event_id}")
 def get_event(event_id: int):
@@ -25,3 +41,21 @@ def get_event(event_id: int):
         if event["id"] == event_id:
             return event
     raise HTTPException(status_code=404, detail="Мероприятие не найдено")
+
+
+@app.get("/api/clubs")
+def list_clubs():
+    return CLUBS
+
+
+@app.get("/api/clubs/{club_id}")
+def get_club(club_id: int):
+    for club in CLUBS:
+        if club["id"] == club_id:
+            return club
+    raise HTTPException(status_code=404, detail="Клуб не найден")
+
+
+@app.get("/api/rooms")
+def list_rooms():
+    return ROOMS
